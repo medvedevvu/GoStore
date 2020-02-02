@@ -3,6 +3,7 @@ package GoStore
 import (
 	"bytes"
 	"encoding/json"
+
 	"github.com/youricorocks/shop_competition"
 )
 
@@ -94,7 +95,7 @@ func (store *Store) CalculateOrder(username string, order shop_competition.Order
 
 	// now use it to count bundles
 	productCount = len(order.Bundles)
-	for i := 0; i < productCount; i++  {
+	for i := 0; i < productCount; i++ {
 		var bunSum Currency
 		if order.Bundles[i].Type == shop_competition.BundleNormal {
 			for _, p := range order.Bundles[i].Products {
@@ -170,7 +171,6 @@ func (store *Store) CalculateOrder(username string, order shop_competition.Order
 		currSum += bunSum
 	}
 
-
 	if key, er := cache(order); er == nil {
 		if v, ok := store.Orders[key]; ok {
 			return v, storeErr
@@ -182,7 +182,6 @@ func (store *Store) CalculateOrder(username string, order shop_competition.Order
 		storeErr.error += er.(StoreError).error
 		storeErr.errStatus = I
 	}
-
 
 	return sum, storeErr
 }
@@ -207,7 +206,7 @@ func (store *Store) PlaceOrder(username string, order shop_competition.Order) er
 		return stErr
 	}
 
-	user.Balance = float32(roundToCur(user.Balance) - roundToCur(sum)) / 100
+	user.Balance = float32(roundToCur(user.Balance)-roundToCur(sum)) / 100
 	return stErr
 }
 
@@ -227,16 +226,16 @@ func (store *Store) Export() ([]byte, error) {
 func NewStore() *Store {
 	return &Store{ProductList: make(map[string]*shop_competition.Product),
 		Accounts: make(map[string]*shop_competition.Account),
-		Orders: make(map[string]float32),
-		Bundles: make(map[string]*shop_competition.Bundle)}
+		Orders:   make(map[string]float32),
+		Bundles:  make(map[string]*shop_competition.Bundle)}
 }
 
 //удаления с сохранением сортировки
-func removeProduct(products [] shop_competition.Product, i int) []shop_competition.Product {
+func removeProduct(products []shop_competition.Product, i int) []shop_competition.Product {
 	return append(products[:i], products[i+1:]...)
 }
 
-func removeBundle(bundles [] shop_competition.Bundle, i int) []shop_competition.Bundle {
+func removeBundle(bundles []shop_competition.Bundle, i int) []shop_competition.Bundle {
 	return append(bundles[:i], bundles[i+1:]...)
 }
 

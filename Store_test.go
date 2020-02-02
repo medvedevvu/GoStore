@@ -1,9 +1,10 @@
 package GoStore
 
 import (
-	"github.com/youricorocks/shop_competition"
 	"reflect"
 	"testing"
+
+	"github.com/youricorocks/shop_competition"
 )
 
 func TestStore_AddProduct(t *testing.T) {
@@ -20,7 +21,7 @@ func TestStore_AddProduct(t *testing.T) {
 		t.Error(err)
 	}
 	if product != *shop.(*Store).ProductList[product.Name] {
-		t.Error(StoreError{ error:"AddProduct(product) result doesn't match with \"product\" " })
+		t.Error(StoreError{error: "AddProduct(product) result doesn't match with \"product\" "})
 	}
 	expected := StoreError{error: "product has already declared"}
 	if err := shop.AddProduct(product); !reflect.DeepEqual(expected, err) {
@@ -48,7 +49,7 @@ func TestStore_ModifyProduct(t *testing.T) {
 	}
 
 	if product != *shop.(*Store).ProductList[product.Name] {
-		t.Error(StoreError{ error:"ModifyProduct(product) result doesn't match with \"product\" " })
+		t.Error(StoreError{error: "ModifyProduct(product) result doesn't match with \"product\" "})
 	}
 
 	product.Name = "Apple"
@@ -93,22 +94,25 @@ func TestStore_RemoveProduct(t *testing.T) {
 }
 
 func TestStore_CalculateOrder(t *testing.T) {
-	var shop shop_competition.Shop
-	shop = NewStore()
+	//var shop shop_competition.Shop -- Shop and Store are differend !
+	/* когда ты так делаешь , описанные интерфейсы
+	   "пропадают" у неописанного типа */
+	shop := NewStore()
 
 	shop.Register("Dimas")
 	shop.AddBalance("Dimas", 100)
-
-	shop.(*Store).Accounts.EditType("Dimas", shop_competition.AccountPremium)
+	/* теперь вызываем по другому */
+	//shop.(*Store).Accounts.EditType("Dimas", shop_competition.AccountPremium)
+	shop.Accounts.EditType("Dimas", shop_competition.AccountPremium)
 
 	products := []shop_competition.Product{
 		shop_competition.Product{
-			Name :  "banana",
+			Name:  "banana",
 			Price: 40,
 			Type:  0,
 		},
 		shop_competition.Product{
-			Name :  "apple",
+			Name:  "apple",
 			Price: 30,
 			Type:  shop_competition.ProductPremium,
 		},
@@ -121,25 +125,29 @@ func TestStore_CalculateOrder(t *testing.T) {
 
 	if val, err := shop.CalculateOrder("Dimas", order); val != 60.5 {
 		t.Error(val, err)
-	} else { t.Log(val, err) }
+	} else {
+		t.Log(val, err)
+	}
 
 	if val, err := shop.CalculateOrder("Dimas", order); val != 60.5 {
 		t.Error(val, err)
-	} else { t.Log(val, err) }
+	} else {
+		t.Log(val, err)
+	}
 
 	products = []shop_competition.Product{
 		shop_competition.Product{
-			Name :  "banana",
+			Name:  "banana",
 			Price: 40,
 			Type:  0,
 		},
 		shop_competition.Product{
-			Name :  "sapre",
+			Name:  "sapre",
 			Price: 30,
 			Type:  shop_competition.ProductSample,
 		},
 		shop_competition.Product{
-			Name :  "apple",
+			Name:  "apple",
 			Price: 30,
 			Type:  shop_competition.ProductPremium,
 		},
@@ -152,10 +160,12 @@ func TestStore_CalculateOrder(t *testing.T) {
 
 	if val, err := shop.CalculateOrder("Dimas", order); val != 60.5 {
 		t.Error(val, err)
-	} else { t.Log(val, err) }
+	} else {
+		t.Log(val, err)
+	}
 
-	bundles := []shop_competition.Bundle {
-		{ Products: products, Type: shop_competition.BundleSample, Discount: 32 },
+	bundles := []shop_competition.Bundle{
+		{Products: products, Type: shop_competition.BundleSample, Discount: 32},
 	}
 
 	order = shop_competition.Order{
@@ -165,7 +175,9 @@ func TestStore_CalculateOrder(t *testing.T) {
 
 	if val, err := shop.CalculateOrder("Dimas", order); err == nil {
 		t.Error(val, err)
-	} else { t.Log(val, err) }
+	} else {
+		t.Log(val, err)
+	}
 }
 
 func TestStore_PlaceOrder(t *testing.T) {
@@ -179,24 +191,24 @@ func TestStore_PlaceOrder(t *testing.T) {
 
 	products := []shop_competition.Product{
 		shop_competition.Product{
-			Name :  "banana",
+			Name:  "banana",
 			Price: 40,
 			Type:  0,
 		},
 		shop_competition.Product{
-			Name :  "sapre",
+			Name:  "sapre",
 			Price: 30,
 			Type:  shop_competition.ProductSample,
 		},
 		shop_competition.Product{
-			Name :  "apple",
+			Name:  "apple",
 			Price: 30,
 			Type:  shop_competition.ProductPremium,
 		},
 	}
 
-	bundles := []shop_competition.Bundle {
-		{ Products: products, Type: shop_competition.BundleSample, Discount: 0.1 },
+	bundles := []shop_competition.Bundle{
+		{Products: products, Type: shop_competition.BundleSample, Discount: 0.1},
 	}
 
 	order := shop_competition.Order{
@@ -217,7 +229,7 @@ func TestStore_Register(t *testing.T) {
 	var shop shop_competition.Shop
 	shop = NewStore()
 
-	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
 
@@ -235,7 +247,7 @@ func TestStore_AddBalance(t *testing.T) {
 	var shop shop_competition.Shop
 	shop = NewStore()
 
-	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
 
@@ -257,7 +269,7 @@ func TestStore_Balance(t *testing.T) {
 	var shop shop_competition.Shop
 	shop = NewStore()
 
-	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
 
@@ -265,7 +277,7 @@ func TestStore_Balance(t *testing.T) {
 		t.Error(err)
 	}
 
-	if res, err := shop.Balance("Pavel_007"); err != nil &&  err.(StoreError).errStatus == E {
+	if res, err := shop.Balance("Pavel_007"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	} else if res != 30 {
 		t.Error("Balance result is wrong")
@@ -276,16 +288,16 @@ func TestStore_GetAccounts(t *testing.T) {
 	var shop shop_competition.Shop
 	shop = NewStore()
 
-	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Pavel_007"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
-	if err := shop.Register("Mashka"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Mashka"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
 	if err := shop.AddBalance("Pavel_007", 30); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
-	if err := shop.Register("Dimas"); err != nil && err.(StoreError).errStatus == E  {
+	if err := shop.Register("Dimas"); err != nil && err.(StoreError).errStatus == E {
 		t.Error(err)
 	}
 	if err := shop.AddBalance("Dimas", 150); err != nil && err.(StoreError).errStatus == E {
@@ -294,23 +306,22 @@ func TestStore_GetAccounts(t *testing.T) {
 
 	accounts := shop.GetAccounts(shop_competition.SortByName)
 	for i := 1; i < len(accounts); i++ {
-		if accounts[i - 1].Name > accounts[i].Name {
+		if accounts[i-1].Name > accounts[i].Name {
 			t.Error("wrong sorting by Name: ", accounts)
 		}
 	}
 
 	accounts = shop.GetAccounts(shop_competition.SortByNameReverse)
 	for i := 1; i < len(accounts); i++ {
-		if accounts[i - 1].Name < accounts[i].Name {
+		if accounts[i-1].Name < accounts[i].Name {
 			t.Error("wrong sorting by NameReverse: ", accounts)
 		}
 	}
 
 	accounts = shop.GetAccounts(shop_competition.SortByBalance)
 	for i := 1; i < len(accounts); i++ {
-		if accounts[i - 1].Balance > accounts[i].Balance {
+		if accounts[i-1].Balance > accounts[i].Balance {
 			t.Error("wrong sorting by Balance: ", accounts)
 		}
 	}
 }
-
