@@ -2,6 +2,7 @@ package GoStore
 
 import "github.com/youricorocks/shop_competition"
 
+//AddProduct
 func (list ProductList) AddProduct(product shop_competition.Product) error {
 	if product.Price <= 0 && product.Type != shop_competition.ProductSample {
 		return StoreError{error: "price must contain positive value"}
