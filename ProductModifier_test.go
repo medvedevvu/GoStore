@@ -27,7 +27,7 @@ func TestAddWrongProduct(t *testing.T) {
 func TestModifyProductOnWrongValue(t *testing.T) {
 	var testProductList ProductList = InitProductList()
 	err := testProductList.ModifyProduct(sc.Product{Name: "вареники:",
-		Price: 995.31, Type: sc.ProductNormal})
+		Price: 995.31, Type: /*sc.ProductNormal*/ 's'})
 	if err == nil {
 		t.Fatalf("Могу использовать с типом символа s = %v ", testProductList)
 	}

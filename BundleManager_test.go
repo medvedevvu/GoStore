@@ -1,9 +1,11 @@
 package GoStore
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/youricorocks/shop_competition"
+	sc "github.com/youricorocks/shop_competition"
 )
 
 func TestAddWrongNameProducts(t *testing.T) {
@@ -22,37 +24,134 @@ func TestAddWrongNameProducts(t *testing.T) {
 	t.Fatalf("Finish %v", shop.ProductList)
 }
 
-func TestAddWrongBundle(t *testing.T) {
-	shop := NewStore()
+func TestWhen3ProductToBundle(t *testing.T) {
 
-	product := shop_competition.Product{
-		Name:  "Brimbom",
-		Price: 100,
-		Type:  shop_competition.ProductNormal,
-	}
+	bundles := Bundles{}
 
 	product1 := shop_competition.Product{
-		Name:  "XXXXX",
+		Name:  "AAAA",
 		Price: 100,
-		Type:  shop_competition.ProductSample,
+		Type:  shop_competition.ProductNormal,
 	}
 
 	product2 := shop_competition.Product{
 		Name:  "YYYYY",
 		Price: 100,
-		Type:  shop_competition.ProductSample,
+		Type:  shop_competition.ProductNormal,
 	}
 
 	product3 := shop_competition.Product{
-		Name:  "ZZZZZZ",
+		Name:  "ZZZZZ",
+		Price: 100,
+		Type:  shop_competition.ProductPremium,
+	}
+
+	err := bundles.AddBundle("Карзин1", product3, 1.999, product2, product1)
+
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+}
+
+func TestWhen2ProductToBundle(t *testing.T) {
+
+	bundles := Bundles{}
+
+	product1 := shop_competition.Product{
+		Name:  "AAAA",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product2 := shop_competition.Product{
+		Name:  "YYYYY",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	err := bundles.AddBundle("Карзина1", product1, 1.999, product2)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+}
+
+func TestBundlesDisc(t *testing.T) {
+
+	product1 := shop_competition.Product{
+		Name:  "AAAA",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product2 := shop_competition.Product{
+		Name:  "YYYYY",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product3 := shop_competition.Product{
+		Name:  "ZZZZZ",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	products := []sc.Product{product1, product2, product3}
+
+	bundles := Bundles{}
+	bundles["Корзина"] = &sc.Bundle{products, sc.BundleNormal, 45}
+	err := bundles.ChangeDiscount("Корзина", 50)
+
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	dsk := bundles["Корзина"].Discount
+	if dsk != 0.5 {
+		t.Fatalf("%f == %f", dsk, 0.5)
+	}
+	fmt.Printf("%f == %f\n", dsk, 0.5)
+}
+
+func TestRemoveBundles(t *testing.T) {
+
+	product1 := shop_competition.Product{
+		Name:  "AAAA",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product2 := shop_competition.Product{
+		Name:  "YYYYY",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product3 := shop_competition.Product{
+		Name:  "ZZZZZ",
+		Price: 100,
+		Type:  shop_competition.ProductNormal,
+	}
+
+	product4 := shop_competition.Product{
+		Name:  "ZZZZZ",
 		Price: 100,
 		Type:  shop_competition.ProductSample,
 	}
 
-	err := shop.AddBundle("", product, 0.00001, product1, product2, product3)
+	products := []sc.Product{product1, product2, product3}
+	products1 := []sc.Product{product1, product2, product4}
 
-	if err == nil {
-		t.Fatalf("")
+	bundles := Bundles{}
+	bundles["Корзина"] = &sc.Bundle{products, sc.BundleNormal, 45}
+	bundles["Корзина1"] = &sc.Bundle{products1, sc.BundleSample, 45}
+
+	err := bundles.RemoveBundle("Корзина1")
+
+	if err != nil {
+		t.Fatalf("%v", err)
 	}
+	fmt.Println(bundles)
 
 }
