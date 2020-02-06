@@ -54,31 +54,8 @@ func TestWhen3ProductToBundle(t *testing.T) {
 
 }
 
-func TestWhen2ProductToBundle(t *testing.T) {
-
-	bundles := Bundles{}
-
-	product1 := shop_competition.Product{
-		Name:  "AAAA",
-		Price: 100,
-		Type:  shop_competition.ProductNormal,
-	}
-
-	product2 := shop_competition.Product{
-		Name:  "YYYYY",
-		Price: 100,
-		Type:  shop_competition.ProductNormal,
-	}
-
-	err := bundles.AddBundle("Карзина1", product1, 1.999, product2)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-}
-
 func TestBundlesDisc(t *testing.T) {
-
+	/* работает */
 	product1 := shop_competition.Product{
 		Name:  "AAAA",
 		Price: 100,
@@ -115,7 +92,7 @@ func TestBundlesDisc(t *testing.T) {
 }
 
 func TestRemoveBundles(t *testing.T) {
-
+	/* работает */
 	product1 := shop_competition.Product{
 		Name:  "AAAA",
 		Price: 100,

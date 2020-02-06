@@ -25,6 +25,7 @@ func TestAddWrongProduct(t *testing.T) {
 }
 
 func TestModifyProductOnWrongValue(t *testing.T) {
+	/* отрабатывает */
 	var testProductList ProductList = InitProductList()
 	err := testProductList.ModifyProduct(sc.Product{Name: "вареники:",
 		Price: 995.31, Type: /*sc.ProductNormal*/ 's'})
